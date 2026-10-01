@@ -1,0 +1,1 @@
+trusted dependency generation D1 — keep PR #1 open for Depends-On baseline
