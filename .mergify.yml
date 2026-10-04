@@ -25,3 +25,11 @@ queue_rules:
     merge_conditions:
       - check-success = vm4-never-batch-note-freshness
     merge_method: merge
+
+pull_request_rules:
+  - name: vm4-batch-note-autoqueue-261005
+    conditions:
+      - title = VM4 BATCH NOTE SCOPE FRESHNESS 261005
+    actions:
+      queue:
+        name: vm4-batch-note-scope-freshness-261005
