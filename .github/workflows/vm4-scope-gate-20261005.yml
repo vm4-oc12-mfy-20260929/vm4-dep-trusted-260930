@@ -18,20 +18,23 @@ jobs:
       - name: Hold for post-composition scope update
         run: sleep 45
 
-      - name: Detect Mergify scopes
-        id: scopes
-        uses: Mergifyio/gha-mergify-ci@v25
+      - name: Install Mergify CLI 2026.10.1
+        uses: Mergifyio/setup-cli@dc99f07e699b94b39e5495c24596372813eadcbc
         with:
-          action: scopes
+          mergify_cli_version: 2026.10.1
+
+      - name: Read Mergify merge-queue note
+        id: queue_info
+        run: mergify ci queue-info
 
       - name: Normalize protected scope
         id: pick
         env:
-          SCOPE_JSON: ${{ steps.scopes.outputs.scopes }}
+          QUEUE_METADATA: ${{ steps.queue_info.outputs.queue_metadata }}
         run: |
-          value="$(jq -r '."protected-scope" // "false"' <<<"$SCOPE_JSON")"
+          value="$(jq -r '((.scopes // []) | index("protected-scope")) != null' <<<"$QUEUE_METADATA")"
           echo "protected=$value" >> "$GITHUB_OUTPUT"
-          echo "scope_json=$SCOPE_JSON"
+          echo "queue_metadata=$QUEUE_METADATA"
 
   protected-tests:
     needs: detect-scopes
