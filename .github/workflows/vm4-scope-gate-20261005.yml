@@ -1,0 +1,55 @@
+name: VM4 Scope Gate 20261005
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  detect-scopes:
+    runs-on: ubuntu-24.04
+    outputs:
+      protected: ${{ steps.pick.outputs.protected }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Hold for post-composition scope update
+        run: sleep 45
+
+      - name: Detect Mergify scopes
+        id: scopes
+        uses: Mergifyio/gha-mergify-ci@v25
+        with:
+          action: scopes
+
+      - name: Normalize protected scope
+        id: pick
+        env:
+          SCOPE_JSON: ${{ steps.scopes.outputs.scopes }}
+        run: |
+          value="$(jq -r '."protected-scope" // "false"' <<<"$SCOPE_JSON")"
+          echo "protected=$value" >> "$GITHUB_OUTPUT"
+          echo "scope_json=$SCOPE_JSON"
+
+  protected-tests:
+    needs: detect-scopes
+    if: ${{ needs.detect-scopes.outputs.protected == 'true' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Protected scope marker
+        run: echo "PROTECTED_SCOPE_EXECUTED"
+
+  ci-gate:
+    if: ${{ !cancelled() }}
+    needs:
+      - detect-scopes
+      - protected-tests
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Aggregate scope coverage
+        uses: Mergifyio/gha-mergify-ci@v25
+        with:
+          action: wait-jobs
+          jobs: ${{ toJSON(needs) }}
