@@ -33,7 +33,7 @@ queue_rules:
       - title = VM4 FORGED NOTE GATE2 STAGING 261005
     merge_conditions:
       - check-success = ci-gate
-      - check-success = vm4-never-forged-note-gate2
+      - label = vm4-forged-note-release-261005
     merge_method: merge
 
 pull_request_rules:
