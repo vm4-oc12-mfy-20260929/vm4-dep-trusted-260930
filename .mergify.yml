@@ -24,7 +24,6 @@ queue_rules:
       - title = VM4 BATCH NOTE SCOPE FRESHNESS 261005
     merge_conditions:
       - check-success = ci-gate
-      - label = vm4-scope-release-261005
     merge_method: merge
 
 pull_request_rules:
