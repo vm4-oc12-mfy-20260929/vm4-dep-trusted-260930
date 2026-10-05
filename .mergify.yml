@@ -26,6 +26,16 @@ queue_rules:
       - check-success = ci-gate
     merge_method: merge
 
+  - name: vm4-forged-note-gate2-261005
+    batch_size: 1
+    batch_max_wait_time: 2 sec
+    queue_conditions:
+      - title = VM4 FORGED NOTE GATE2 STAGING 261005
+    merge_conditions:
+      - check-success = ci-gate
+      - check-success = vm4-never-forged-note-gate2
+    merge_method: merge
+
 pull_request_rules:
   - name: vm4-batch-note-autoqueue-261005
     conditions:
