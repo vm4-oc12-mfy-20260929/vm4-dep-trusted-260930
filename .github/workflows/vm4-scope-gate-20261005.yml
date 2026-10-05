@@ -42,8 +42,10 @@ jobs:
     if: ${{ needs.detect-scopes.outputs.protected == 'true' }}
     runs-on: ubuntu-24.04
     steps:
-      - name: Protected scope marker
-        run: echo "PROTECTED_SCOPE_EXECUTED"
+      - name: Protected scope must block
+        run: |
+          echo "PROTECTED_SCOPE_EXECUTED"
+          exit 1
 
   ci-gate:
     if: ${{ !cancelled() }}
