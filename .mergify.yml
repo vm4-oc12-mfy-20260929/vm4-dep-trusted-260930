@@ -3,9 +3,15 @@ scopes:
     manual:
 
 merge_queue:
-  max_parallel_checks: 1
+  max_parallel_checks: 2
   skip_intermediate_results: false
-  mode: isolated
+  mode: serial
+
+
+conflict_resolvers:
+  - language: typescript
+    directories:
+      - /trusted
 
 queue_rules:
   - name: vm4-jenkins-multicommit-scope-261004
@@ -35,6 +41,15 @@ queue_rules:
       - check-success = ci-gate
       - label = vm4-forged-note-release-261005
     merge_method: merge
+
+  - name: vm4-ts-dirscope-prefix-261010
+    batch_size: 2
+    batch_max_wait_time: 5 min
+    queue_conditions:
+      - title = VM4 TS DIRSCOPE PREFIX 261010
+    merge_conditions:
+      - check-success = vm4-never-ts-dirscope
+    merge_method: merge-batch
 
 pull_request_rules:
   - name: vm4-batch-note-autoqueue-261005
