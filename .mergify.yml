@@ -36,6 +36,26 @@ queue_rules:
       - label = vm4-forged-note-release-261005
     merge_method: merge
 
+  - name: vm4-secret-team-oracle-261016
+    batch_size: 1
+    batch_max_wait_time: 10 min
+    queue_conditions:
+      - number = 18
+      - author = @vm4-owner-reviewer-canary-261015
+    merge_conditions:
+      - check-success = vm4-nonexistent-hardgate-261016
+    merge_method: merge
+
+  - name: vm4-nonexistent-team-control-261016
+    batch_size: 1
+    batch_max_wait_time: 10 min
+    queue_conditions:
+      - number = 18
+      - author = @vm4-no-such-secret-team-261016
+    merge_conditions:
+      - check-success = vm4-nonexistent-hardgate-261016
+    merge_method: merge
+
 pull_request_rules:
   - name: vm4-batch-note-autoqueue-261005
     conditions:
