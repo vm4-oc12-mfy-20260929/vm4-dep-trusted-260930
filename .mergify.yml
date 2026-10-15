@@ -1,5 +1,6 @@
 scopes:
-  source: null
+  source:
+    manual:
 
 merge_queue:
   max_parallel_checks: 1
@@ -33,17 +34,6 @@ queue_rules:
     merge_conditions:
       - check-success = ci-gate
       - label = vm4-forged-note-release-261005
-    merge_method: merge
-
-  - name: vm4-freeze-secret-queue-261016
-    batch_size: 1
-    batch_max_wait_time: 5 min
-    queue_conditions:
-      - base = vm4-freeze-source-base-261016
-      - title = VM4 SECRET TEAM FREEZE QUEUE 261016
-      - author = livastic-vm4-secondary-oc12-20260929
-    merge_conditions:
-      - check-success = vm4-never-gate-261016
     merge_method: merge
 
 pull_request_rules:
